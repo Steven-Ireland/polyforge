@@ -177,6 +177,8 @@ With two numbers: scales from the first value to the second.
 
 **Taper is one-shot** — it is consumed by the next `draw` and then resets to 1.0. This is deliberate: a forgotten taper that cascades through subsequent draws would produce mangled geometry that's hard to debug. Color, by contrast, is persistent because wrong color is visually obvious and non-destructive.
 
+**Chaining tapers:** Because taper resets after each draw, consecutive tapered draws must chain manually. If a draw ends at scale 0.7, the next taper should start at 0.7 to avoid a visible seam: `taper 0.7 0.4`.
+
 ### arc — Curved Extrusion
 
 ```

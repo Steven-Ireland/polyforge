@@ -1,0 +1,53 @@
+model "Tomato" {
+
+  connect "body" "stem"
+
+  group "body" {
+    move (0, 0, 0)
+    face (0, 1, 0)
+    color #CC2222 roughness 0.6
+
+    // Bottom: start small, bulge out
+    profile circle(0.2)
+    taper 1 4.5
+    draw 0.4 segments 3
+
+    // Wide middle
+    profile circle(0.9)
+    draw 0.5
+
+    // Upper half: taper back in
+    taper 1 0.7
+    draw 0.5 segments 3
+
+    // Top dimple area
+    taper 0.7 0.4
+    draw 0.15 segments 2
+  }
+
+  group "stem" {
+    // Small green cap at the top
+    group "calyx" {
+      move (0, 1.55, 0)
+      face (0, 1, 0)
+      color #2E7D32 roughness 0.8
+      profile circle(0.36)
+
+      taper 1 0.3
+      draw 0.08
+    }
+
+    // Stem sticking up
+    group "stalk" {
+      move (0, 1.63, 0)
+      face (0, 1, 0.15)
+      color #33691C roughness 0.8
+      profile square(0.06)
+
+      draw 0.3
+
+      taper 1 0.5
+      draw 0.15
+    }
+  }
+}
