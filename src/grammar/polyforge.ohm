@@ -1,0 +1,82 @@
+PolyForge {
+  Model = "model" string "{" Statement* "}"
+
+  Statement = Group
+            | Mirror
+            | ProfileCustomDef
+            | ProfileBuiltin
+            | ProfileCustomRef
+            | Color
+            | Move
+            | Shift
+            | Face
+            | Rotate
+            | Taper
+            | DrawTarget
+            | DrawDistance
+            | Arc
+            | Cap
+            | Save
+            | Restore
+
+  Group = "group" string "{" Statement* "}"
+
+  Mirror = "mirror" axis+ "{" Statement* "}"
+
+  // Profiles
+  ProfileBuiltin = "profile" builtinShape "(" numList ")"
+  ProfileCustomDef = "profile" "custom" string "[" point2dList "]"
+  ProfileCustomRef = "profile" string
+
+  builtinShape = "circle" | "square" | "rect" | "hex" | "ngon" | "diamond"
+
+  // Color
+  Color = "color" colorValue materialProps?
+  colorValue = hexColor | rgbColor | string
+  hexColor = "#" hexDigit hexDigit hexDigit hexDigit hexDigit hexDigit
+  rgbColor = "rgb" "(" number "," number "," number ")"
+  materialProps = materialProp+
+  materialProp = "metallic" number
+               | "roughness" number
+
+  // Cursor
+  Move = "move" point3d
+  Shift = "shift" point3d
+  Face = "face" point3d
+  Rotate = "rotate" number
+
+  // Drawing
+  Taper = "taper" number number?
+  DrawDistance = "draw" number segments?
+  DrawTarget = "draw" point3d segments?
+  Arc = "arc" number number segments?
+  segments = "segments" number
+
+  // Caps
+  Cap = "cap" capWhich capOnOff
+  capWhich = "start" | "end" | "both"
+  capOnOff = "on" | "off"
+
+  // Save/Restore
+  Save = "save"
+  Restore = "restore"
+
+  // Primitives
+  point3d = "(" number "," number "," number ")"
+  point2d = "(" number "," number ")"
+  point2dList = point2d ("," point2d)*
+  numList = number ("," number)*
+
+  axis = "x" | "y" | "z"
+
+  number = "-"? digit+ ("." digit+)?
+
+  string = "\"" (~"\"" any)* "\""
+
+  hexDigit = "0".."9" | "a".."f" | "A".."F"
+
+  // Whitespace and comments
+  space += comment
+  comment = "//" (~"\n" any)* ("\n" | end)
+          | "/*" (~"*/" any)* "*/"
+}

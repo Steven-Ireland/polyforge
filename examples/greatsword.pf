@@ -1,0 +1,60 @@
+model "Curved Greatsword" {
+
+  group "blade" {
+    move (0, 0, 0)
+    face (0, 1, 0)
+    color "steel" metallic 0.7 roughness 0.3
+    profile diamond(0.5, 0.18)
+
+    // Straight base of the blade
+    draw 2
+
+    // Curved sweep of the blade
+    arc 8 30 segments 6
+
+    // Tapered tip
+    taper 0
+    draw 1.5 segments 4
+  }
+
+  group "hilt" {
+    group "crossguard" {
+      color "gold" metallic 0.9 roughness 0.2
+      profile rect(0.18, 0.12)
+
+      // Curved crossguard sweeping downward
+      mirror x {
+        move (0, -0.15, 0)
+        face (1, 0, 0)
+        draw 1.5
+
+        taper 1 0.6
+        draw 0.4
+      }
+    }
+
+    group "grip" {
+      move (0, -0.15, 0)
+      face (0, -1, 0)
+      color "leather" roughness 0.9
+      profile circle(0.2)
+
+      // Long two-handed grip
+      taper 1 1.1
+      draw 1.2
+
+      taper 1.1 1
+      draw 1.2
+    }
+
+    group "pommel" {
+      color "gold" metallic 0.9 roughness 0.2
+      profile circle(0.3)
+
+      draw 0.25
+
+      taper 0.5
+      draw 0.25
+    }
+  }
+}
