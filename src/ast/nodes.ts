@@ -9,6 +9,7 @@ export type ASTNode =
   | ModelNode
   | GroupNode
   | MirrorNode
+  | ConnectNode
   | ProfileBuiltinNode
   | ProfileCustomDefNode
   | ProfileCustomRefNode
@@ -141,5 +142,12 @@ export interface SaveNode {
 
 export interface RestoreNode {
   type: "restore";
+  loc?: SourceLocation;
+}
+
+export interface ConnectNode {
+  type: "connect";
+  groupA: string;
+  groupB: string;
   loc?: SourceLocation;
 }

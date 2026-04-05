@@ -59,6 +59,26 @@
     }
     .card-header h2 { font-size: 1.1rem; font-weight: 600; }
     .card-header span { font-size: 0.8rem; color: var(--dim); }
+    .fullscreen-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .fullscreen-btn:hover { color: var(--text); border-color: var(--dim); }
+    .card.fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      border-radius: 0;
+      overflow-y: auto;
+    }
+    .card.fullscreen model-viewer { height: calc(100vh - 60px); }
+    .card.fullscreen .code-panel { display: none; }
     model-viewer {
       width: 100%;
       height: 320px;
@@ -98,6 +118,7 @@
       <div class="card-header">
         <h2>Wooden Chair</h2>
         <span>chair.pf</span>
+        <button class="fullscreen-btn" onclick="toggleFullscreen(this)">&#x26F6; Fullscreen</button>
       </div>
       <model-viewer src="chair.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
       <div class="code-panel">
@@ -158,10 +179,13 @@
       <div class="card-header">
         <h2>Curved Greatsword</h2>
         <span>greatsword.pf</span>
+        <button class="fullscreen-btn" onclick="toggleFullscreen(this)">&#x26F6; Fullscreen</button>
       </div>
       <model-viewer src="greatsword.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
       <div class="code-panel">
         <pre><code>model "Curved Greatsword" {
+
+  connect "blade" "hilt"
 
   group "blade" {
     move (0, 0, 0)
@@ -181,13 +205,15 @@
   }
 
   group "hilt" {
+    connect "crossguard" "grip"
+
     group "crossguard" {
       color "gold" metallic 0.9 roughness 0.2
-      profile rect(0.18, 0.12)
+      profile diamond(0.18, 0.18)
 
       // Curved crossguard sweeping downward
       mirror x {
-        move (0, -0.15, 0)
+        move (0, 0, 0)
         face (1, 0, 0)
         draw 1.5
 
@@ -197,10 +223,10 @@
     }
 
     group "grip" {
-      move (0, -0.15, 0)
+      move (0, 0, 0)
       face (0, -1, 0)
       color "leather" roughness 0.9
-      profile circle(0.2)
+      profile diamond(0.4, 0.18)
 
       // Long two-handed grip
       taper 1 1.1
@@ -228,10 +254,13 @@
       <div class="card-header">
         <h2>Iron Sword</h2>
         <span>sword.pf</span>
+        <button class="fullscreen-btn" onclick="toggleFullscreen(this)">&#x26F6; Fullscreen</button>
       </div>
       <model-viewer src="sword.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
       <div class="code-panel">
         <pre><code>model "Iron Sword" {
+
+  connect "blade" "hilt"
 
   group "blade" {
     move (0, 0, 0)
@@ -248,12 +277,14 @@
   }
 
   group "hilt" {
+    connect "crossguard" "grip"
+
     group "crossguard" {
       color "gold" metallic 0.9 roughness 0.2
-      profile rect(0.15, 0.1)
+      profile diamond(0.15, 0.15)
 
       mirror x {
-        move (0, -0.1, 0)
+        move (0, 0, 0)
         face (1, 0, 0)
         draw 1.2
 
@@ -264,10 +295,10 @@
     }
 
     group "grip" {
-      move (0, -0.1, 0)
+      move (0, 0, 0)
       face (0, -1, 0)
       color "leather" roughness 0.9
-      profile circle(0.18)
+      profile diamond(0.36, 0.15)
 
       // Grip is slightly wider in the middle
       taper 1 1.15
@@ -296,6 +327,7 @@
       <div class="card-header">
         <h2>Wooden Table</h2>
         <span>table.pf</span>
+        <button class="fullscreen-btn" onclick="toggleFullscreen(this)">&#x26F6; Fullscreen</button>
       </div>
       <model-viewer src="table.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
       <div class="code-panel">
@@ -325,5 +357,23 @@
       </div>
     </div>
   </div>
+  <script>
+    function toggleFullscreen(btn) {
+      const card = btn.closest('.card');
+      const isFullscreen = card.classList.toggle('fullscreen');
+      btn.innerHTML = isFullscreen ? '\u2715 Exit' : '\u26F6 Fullscreen';
+      document.body.style.overflow = isFullscreen ? 'hidden' : '';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const card = document.querySelector('.card.fullscreen');
+        if (card) {
+          card.classList.remove('fullscreen');
+          card.querySelector('.fullscreen-btn').innerHTML = '\u26F6 Fullscreen';
+          document.body.style.overflow = '';
+        }
+      }
+    });
+  </script>
 </body>
 </html>

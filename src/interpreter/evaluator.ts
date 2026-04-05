@@ -52,6 +52,10 @@ export function evaluate(model: ModelNode): MeshBuilder {
         execMirror(node.axes, node.body);
         break;
 
+      case "connect":
+        // Declarative — handled by connectivity analysis, not execution
+        break;
+
       case "profile_builtin":
         state.profile = resolveBuiltinProfile(node.shape, node.args);
         break;

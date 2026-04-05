@@ -1,5 +1,7 @@
 model "Curved Greatsword" {
 
+  connect "blade" "hilt"
+
   group "blade" {
     move (0, 0, 0)
     face (0, 1, 0)
@@ -18,13 +20,15 @@ model "Curved Greatsword" {
   }
 
   group "hilt" {
+    connect "crossguard" "grip"
+
     group "crossguard" {
       color "gold" metallic 0.9 roughness 0.2
-      profile rect(0.18, 0.12)
+      profile diamond(0.18, 0.18)
 
       // Curved crossguard sweeping downward
       mirror x {
-        move (0, -0.15, 0)
+        move (0, 0, 0)
         face (1, 0, 0)
         draw 1.5
 
@@ -34,10 +38,10 @@ model "Curved Greatsword" {
     }
 
     group "grip" {
-      move (0, -0.15, 0)
+      move (0, 0, 0)
       face (0, -1, 0)
       color "leather" roughness 0.9
-      profile circle(0.2)
+      profile diamond(0.4, 0.18)
 
       // Long two-handed grip
       taper 1 1.1

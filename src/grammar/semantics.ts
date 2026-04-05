@@ -10,6 +10,7 @@ const grammarSource = `PolyForge {
 
   Statement = Group
             | Mirror
+            | Connect
             | ProfileCustomDef
             | ProfileBuiltin
             | ProfileCustomRef
@@ -29,6 +30,9 @@ const grammarSource = `PolyForge {
   Group = "group" string "{" Statement* "}"
 
   Mirror = "mirror" Axis+ "{" Statement* "}"
+
+  // Connectivity assertions
+  Connect = "connect" string string
 
   // Profiles
   ProfileBuiltin = "profile" BuiltinShape "(" NumList ")"
@@ -164,6 +168,18 @@ semantics.addOperation<any>("toAST", {
       type: "mirror",
       axes: axes.children.map((c: ohm.Node) => c.sourceString),
       body: stmts.children.map((c: ohm.Node) => c.toAST()),
+      loc: getLoc(this),
+    };
+  },
+
+  Connect(_connect, nameA, nameB) {
+    // Extract raw string content (don't go through string's toAST which resolves color names)
+    const rawA = nameA.sourceString.slice(1, -1);
+    const rawB = nameB.sourceString.slice(1, -1);
+    return {
+      type: "connect",
+      groupA: rawA,
+      groupB: rawB,
       loc: getLoc(this),
     };
   },

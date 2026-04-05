@@ -29,6 +29,7 @@ const cards = pfFiles.map(pf => {
       <div class="card-header">
         <h2>${title}</h2>
         <span>${pf}</span>
+        <button class="fullscreen-btn" onclick="toggleFullscreen(this)">&#x26F6; Fullscreen</button>
       </div>
       <model-viewer src="${glb}" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
       <div class="code-panel">
@@ -98,6 +99,26 @@ const html = `<!DOCTYPE html>
     }
     .card-header h2 { font-size: 1.1rem; font-weight: 600; }
     .card-header span { font-size: 0.8rem; color: var(--dim); }
+    .fullscreen-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .fullscreen-btn:hover { color: var(--text); border-color: var(--dim); }
+    .card.fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      border-radius: 0;
+      overflow-y: auto;
+    }
+    .card.fullscreen model-viewer { height: calc(100vh - 60px); }
+    .card.fullscreen .code-panel { display: none; }
     model-viewer {
       width: 100%;
       height: 320px;
@@ -134,6 +155,24 @@ const html = `<!DOCTYPE html>
   <div class="gallery">
 ${cards}
   </div>
+  <script>
+    function toggleFullscreen(btn) {
+      const card = btn.closest('.card');
+      const isFullscreen = card.classList.toggle('fullscreen');
+      btn.innerHTML = isFullscreen ? '\\u2715 Exit' : '\\u26F6 Fullscreen';
+      document.body.style.overflow = isFullscreen ? 'hidden' : '';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const card = document.querySelector('.card.fullscreen');
+        if (card) {
+          card.classList.remove('fullscreen');
+          card.querySelector('.fullscreen-btn').innerHTML = '\\u26F6 Fullscreen';
+          document.body.style.overflow = '';
+        }
+      }
+    });
+  <\/script>
 </body>
 </html>
 `;

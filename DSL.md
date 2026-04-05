@@ -241,6 +241,30 @@ group "hilt" {
 }
 ```
 
+### connect — Assert Groups Touch
+
+Declares that two sibling groups should share geometry at their boundary. If they don't, the CLI emits a warning with the nearest distance between them. This is useful for catching alignment bugs without flagging intentionally separate parts.
+
+```
+connect "blade" "hilt"
+```
+
+Place `connect` inside the scope where both groups are defined:
+
+```
+model "Iron Sword" {
+  connect "blade" "hilt"
+  group "blade" { ... }
+  group "hilt" {
+    connect "crossguard" "grip"
+    group "crossguard" { ... }
+    group "grip" { ... }
+  }
+}
+```
+
+The check runs during both `build` and `validate`. Warnings are non-blocking — the build still succeeds.
+
 ### save / restore — Branch and Return
 
 When you need to draw a branch and then return to continue from the same point (like adding crossguards to a sword blade), use save/restore:
