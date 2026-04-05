@@ -1,5 +1,7 @@
 model "Wooden Table" {
 
+  connect "legs" "tabletop"
+
   group "legs" {
     color "wood"
     profile square(0.15)
@@ -7,7 +9,7 @@ model "Wooden Table" {
 
     // Four legs via double mirror
     mirror x z {
-      move (1.3, 0.65, 0.6)
+      move (1.325, 0.65, 0.625)
       draw 2.65
     }
   }

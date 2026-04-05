@@ -1,5 +1,8 @@
 model "Wooden Chair" {
 
+  connect "legs" "seat"
+  connect "seat" "backrest"
+
   group "legs" {
     color "wood"
     profile square(0.15)
@@ -7,7 +10,7 @@ model "Wooden Chair" {
 
     // Four legs via double mirror
     mirror x z {
-      move (0.7, 0, 0.7)
+      move (0.725, 0, 0.725)
       draw 2
     }
   }
@@ -25,7 +28,7 @@ model "Wooden Chair" {
 
     // Two vertical posts
     mirror x {
-      move (0.65, 0.12, -0.7)
+      move (0.74, 0.12, -0.74)
       face (0, 1, 0)
       profile square(0.12)
       draw 2
@@ -33,18 +36,18 @@ model "Wooden Chair" {
 
     // Top slat connecting the posts
     group "top-slat" {
-      move (-0.65, 2.12, -0.7)
+      move (-0.74, 2.12, -0.74)
       face (1, 0, 0)
       profile rect(0.08, 0.4)
-      draw 1.3
+      draw 1.48
     }
 
     // Middle slat
     group "mid-slat" {
-      move (-0.65, 1.2, -0.7)
+      move (-0.74, 1.2, -0.74)
       face (1, 0, 0)
       profile rect(0.08, 0.3)
-      draw 1.3
+      draw 1.48
     }
   }
 }
