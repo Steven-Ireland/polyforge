@@ -36,9 +36,9 @@ model "Wooden Chair" {
 
     // Top slat connecting the posts
     group "top-slat" {
-      move (-0.74, 2.12, -0.74)
+      move (-0.74, 1.92, -0.74)
       face (1, 0, 0)
-      profile rect(0.08, 0.4)
+      profile rect(0.4, 0.08)
       draw 1.48
     }
 
@@ -46,7 +46,7 @@ model "Wooden Chair" {
     group "mid-slat" {
       move (-0.74, 1.2, -0.74)
       face (1, 0, 0)
-      profile rect(0.08, 0.3)
+      profile rect(0.3, 0.08)
       draw 1.48
     }
   }
