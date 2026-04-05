@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolyForge Examples</title>
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d27;
+      --border: #2a2d3a;
+      --text: #e0e0e8;
+      --dim: #888899;
+      --accent: #7c9bf5;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    header p {
+      color: var(--dim);
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+    header a { color: var(--accent); text-decoration: none; }
+    header a:hover { text-decoration: underline; }
+    .gallery {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 1rem 1.25rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .card-header h2 { font-size: 1.1rem; font-weight: 600; }
+    .card-header span { font-size: 0.8rem; color: var(--dim); }
+    model-viewer {
+      width: 100%;
+      height: 320px;
+      background: #13151d;
+      --poster-color: transparent;
+    }
+    .code-panel {
+      border-top: 1px solid var(--border);
+      max-height: 240px;
+      overflow-y: auto;
+    }
+    .code-panel::-webkit-scrollbar { width: 6px; }
+    .code-panel::-webkit-scrollbar-track { background: transparent; }
+    .code-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    pre {
+      margin: 0;
+      padding: 1rem 1.25rem;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      color: #c8ccd8;
+    }
+    @media (max-width: 560px) {
+      .gallery { grid-template-columns: 1fr; }
+      model-viewer { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PolyForge Examples</h1>
+    <p>Low-poly 3D models defined in the <a href="https://github.com/Steven-Ireland/polyforge">PolyForge DSL</a></p>
+  </header>
+  <div class="gallery">
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Wooden Chair</h2>
+        <span>chair.pf</span>
+      </div>
+      <model-viewer src="chair.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
+      <div class="code-panel">
+        <pre><code>model "Wooden Chair" {
+
+  group "legs" {
+    color "wood"
+    profile square(0.15)
+    face (0, -1, 0)
+
+    // Four legs via double mirror
+    mirror x z {
+      move (0.7, 0, 0.7)
+      draw 2
+    }
+  }
+
+  group "seat" {
+    move (0, 0, 0)
+    face (0, 1, 0)
+    color "wood-dark"
+    profile rect(1.6, 1.6)
+    draw 0.12
+  }
+
+  group "backrest" {
+    color "wood"
+
+    // Two vertical posts
+    mirror x {
+      move (0.65, 0.12, -0.7)
+      face (0, 1, 0)
+      profile square(0.12)
+      draw 2
+    }
+
+    // Top slat connecting the posts
+    group "top-slat" {
+      move (-0.65, 2.12, -0.7)
+      face (1, 0, 0)
+      profile rect(0.08, 0.4)
+      draw 1.3
+    }
+
+    // Middle slat
+    group "mid-slat" {
+      move (-0.65, 1.2, -0.7)
+      face (1, 0, 0)
+      profile rect(0.08, 0.3)
+      draw 1.3
+    }
+  }
+}</code></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Curved Greatsword</h2>
+        <span>greatsword.pf</span>
+      </div>
+      <model-viewer src="greatsword.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
+      <div class="code-panel">
+        <pre><code>model "Curved Greatsword" {
+
+  group "blade" {
+    move (0, 0, 0)
+    face (0, 1, 0)
+    color "steel" metallic 0.7 roughness 0.3
+    profile diamond(0.5, 0.18)
+
+    // Straight base of the blade
+    draw 2
+
+    // Curved sweep of the blade
+    arc 8 30 segments 6
+
+    // Tapered tip
+    taper 0
+    draw 1.5 segments 4
+  }
+
+  group "hilt" {
+    group "crossguard" {
+      color "gold" metallic 0.9 roughness 0.2
+      profile rect(0.18, 0.12)
+
+      // Curved crossguard sweeping downward
+      mirror x {
+        move (0, -0.15, 0)
+        face (1, 0, 0)
+        draw 1.5
+
+        taper 1 0.6
+        draw 0.4
+      }
+    }
+
+    group "grip" {
+      move (0, -0.15, 0)
+      face (0, -1, 0)
+      color "leather" roughness 0.9
+      profile circle(0.2)
+
+      // Long two-handed grip
+      taper 1 1.1
+      draw 1.2
+
+      taper 1.1 1
+      draw 1.2
+    }
+
+    group "pommel" {
+      color "gold" metallic 0.9 roughness 0.2
+      profile circle(0.3)
+
+      draw 0.25
+
+      taper 0.5
+      draw 0.25
+    }
+  }
+}</code></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Iron Sword</h2>
+        <span>sword.pf</span>
+      </div>
+      <model-viewer src="sword.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
+      <div class="code-panel">
+        <pre><code>model "Iron Sword" {
+
+  group "blade" {
+    move (0, 0, 0)
+    face (0, 1, 0)
+    color "steel" metallic 0.7 roughness 0.3
+    profile diamond(0.4, 0.15)
+
+    // Main blade shaft
+    draw 4
+
+    // Tip tapers to a point
+    taper 0
+    draw 1.5 segments 4
+  }
+
+  group "hilt" {
+    group "crossguard" {
+      color "gold" metallic 0.9 roughness 0.2
+      profile rect(0.15, 0.1)
+
+      mirror x {
+        move (0, -0.1, 0)
+        face (1, 0, 0)
+        draw 1.2
+
+        // Slight flare at the tips
+        taper 1 1.3
+        draw 0.3
+      }
+    }
+
+    group "grip" {
+      move (0, -0.1, 0)
+      face (0, -1, 0)
+      color "leather" roughness 0.9
+      profile circle(0.18)
+
+      // Grip is slightly wider in the middle
+      taper 1 1.15
+      draw 0.9
+
+      taper 1.15 1
+      draw 0.9
+    }
+
+    group "pommel" {
+      // cursor continues from end of grip
+      color "gold" metallic 0.9 roughness 0.2
+      profile circle(0.25)
+
+      draw 0.2
+
+      taper 0.6
+      draw 0.2
+    }
+  }
+}</code></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Wooden Table</h2>
+        <span>table.pf</span>
+      </div>
+      <model-viewer src="table.glb" auto-rotate camera-controls touch-action="pan-y" shadow-intensity="0.4" environment-image="neutral"></model-viewer>
+      <div class="code-panel">
+        <pre><code>model "Wooden Table" {
+
+  group "legs" {
+    color "wood"
+    profile square(0.15)
+    face (0, -1, 0)
+
+    // Four legs via double mirror
+    mirror x z {
+      move (1.3, 0.65, 0.6)
+      draw 2.65
+    }
+  }
+
+  group "tabletop" {
+    move (0, 0.65, 0)
+    face (0, 1, 0)
+    color "wood-dark"
+    profile rect(2.8, 1.4)
+    draw 0.1
+  }
+
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

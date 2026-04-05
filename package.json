@@ -9,7 +9,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/cli/index.js",
-    "test": "node --test dist/tests/**/*.test.js"
+    "test": "node --test dist/tests/**/*.test.js",
+    "docs:build": "node docs/build.js",
+    "docs": "node docs/build.js && npx serve docs"
   },
   "keywords": [],
   "author": "",
