@@ -99,18 +99,30 @@ export function minRotation(from: vec3, to: vec3): quat {
 }
 
 // Transform a 2D profile point into 3D world space given cursor state
+// The optional reflect parameter applies axis reflections to local coordinates
+// before the orientation transform, ensuring correct geometry under mirror.
 export function profilePointToWorld(
   point: Point2D,
   state: CursorState,
-  scale: number = 1
+  scale: number = 1,
+  reflect?: [boolean, boolean, boolean]
 ): [number, number, number] {
   // Profile point is in the XZ plane (perpendicular to +Y default facing)
   // Apply twist rotation, then scale, then orient, then translate
   const twistRad = (state.twist * Math.PI) / 180;
   const cos = Math.cos(twistRad);
   const sin = Math.sin(twistRad);
-  const tx = (point[0] * cos - point[1] * sin) * scale;
-  const tz = (point[0] * sin + point[1] * cos) * scale;
+  let tx = (point[0] * cos - point[1] * sin) * scale;
+  let tz = (point[0] * sin + point[1] * cos) * scale;
+
+  // Apply reflection to local coordinates before orientation transform.
+  // reflectState computes R' = Mk·R·Mk, but the correct reflected vertex is
+  // R'·Mk·local + pos' = Mk·R·local + pos'. Without this, the ring shape
+  // isn't a true reflection and winding compensation produces inverted normals.
+  if (reflect) {
+    if (reflect[0]) tx = -tx;
+    if (reflect[2]) tz = -tz;
+  }
 
   // Local point in default orientation (profile in XZ plane, facing +Y)
   const local = vec3.fromValues(tx, 0, tz);
@@ -129,7 +141,8 @@ export function profilePointToWorld(
 // Generate a world-space ring from the current profile at the cursor position
 export function generateRing(
   state: CursorState,
-  scale: number = 1
+  scale: number = 1,
+  reflect?: [boolean, boolean, boolean]
 ): [number, number, number][] {
-  return state.profile.map((p) => profilePointToWorld(p, state, scale));
+  return state.profile.map((p) => profilePointToWorld(p, state, scale, reflect));
 }

@@ -237,7 +237,7 @@ export function evaluate(model: ModelNode): MeshBuilder {
       const scale0 = taperStart + (taperEnd - taperStart) * t0;
       const scale1 = taperStart + (taperEnd - taperStart) * t1;
 
-      let ring0 = generateRing(state, scale0);
+      let ring0 = generateRing(state, scale0, activeReflect);
 
       // Advance cursor
       const stepDist = distance / numSeg;
@@ -245,7 +245,7 @@ export function evaluate(model: ModelNode): MeshBuilder {
       state.position[1] += dir[1] * stepDist;
       state.position[2] += dir[2] * stepDist;
 
-      let ring1 = generateRing(state, scale1);
+      let ring1 = generateRing(state, scale1, activeReflect);
 
       // Odd-axis reflections reverse triangle winding; fix by reversing ring order
       if (isWindingFlipped()) {
@@ -315,7 +315,7 @@ export function evaluate(model: ModelNode): MeshBuilder {
       const scale0 = taperStart + (taperEnd - taperStart) * t0;
       const scale1 = taperStart + (taperEnd - taperStart) * t1;
 
-      let ring0 = generateRing(state, scale0);
+      let ring0 = generateRing(state, scale0, activeReflect);
 
       // Rotate cursor around arc center
       // The rotation axis is perpendicular to both facing and right (local "up")
@@ -332,7 +332,7 @@ export function evaluate(model: ModelNode): MeshBuilder {
       quat.multiply(state.orientation, rotQ, state.orientation);
       quat.normalize(state.orientation, state.orientation);
 
-      let ring1 = generateRing(state, scale1);
+      let ring1 = generateRing(state, scale1, activeReflect);
 
       // Odd-axis reflections reverse triangle winding; fix by reversing ring order
       if (isWindingFlipped()) {
